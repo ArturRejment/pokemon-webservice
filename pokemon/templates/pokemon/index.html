@@ -1,3 +1,3 @@
 {% for pokemon in pokemon_data %}
-{{pokemon.name}} - {{pokemon.id}} - {% for type in pokemon.types %} {{type}} {% endfor %}<br>
+{{pokemon.name}} - {{pokemon.id}} - {% for type in pokemon.types %} {{type}} {% endfor %} <a href="{% url 'pokemon_detail' pokemon.id %}"> Detail </a> <br>
 {% endfor %}

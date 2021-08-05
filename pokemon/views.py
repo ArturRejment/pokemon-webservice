@@ -3,28 +3,37 @@ import requests
 from django.shortcuts import render
 from django.views.generic.base import TemplateView
 
+from .utils import sendPokemonRequest
+
 
 class MainPageView(TemplateView):
 	template_name = 'pokemon/index.html'
 
 	def get_context_data(self, **kwargs):
+		# Get the context
 		context = super().get_context_data(**kwargs)
+		# Set PokeAPI pagination
 		page = self.request.GET.get('page', 1)
-		offset = (int(page) * 10 - 10)
+		offset = (int(page) * 10 - 9)
 		payload = {'limit':10, 'offset': offset}
-		pokemons_data = requests.get('https://pokeapi.co/api/v2/pokemon/', params=payload).json()['results']
-		data = []
-		for pokemon in pokemons_data:
-			dictionary = {}
-			response = requests.get(pokemon['url']).json()
-			dictionary['name'] = response['name']
-			dictionary['id'] = response['id']
-			types = []
-			for type in response['types']:
-				types.append(type['type']['name'])
-			dictionary['types'] = types
-			data.append(dictionary)
-			# print(data)
-		print(data)
-		context['pokemon_data'] = data
+
+		# Make a list of fetched pokemons
+		pokemons_data = []
+		for num in range(offset, offset+10):
+			pokemon = sendPokemonRequest(num)
+			# Append data to the pokemons list
+			pokemons_data.append(pokemon)
+		# Add pokemons data to the context
+		context['pokemon_data'] = pokemons_data
+		return context
+
+
+class DetailPageView(TemplateView):
+	template_name = 'pokemon/detail.html'
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		pokemon_id = kwargs['id']
+		response = requests.get(f'https://pokeapi.co/api/v2/pokemon/{pokemon_id}').json()
+		context['pokemon_data'] = response
 		return context
