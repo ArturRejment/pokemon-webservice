@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib.auth.views import LogoutView
 
-from .views import CustomLoginView, success, RegisterView
+from .views import CustomLoginView, RegisterView
 
 urlpatterns = [
 	path('login/', CustomLoginView.as_view(), name='login'),
