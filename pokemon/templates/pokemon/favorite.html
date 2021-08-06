@@ -13,7 +13,10 @@
 					{% endfor %}
 				</div>
 				<a class="btn btn-outline-success" href="{% url 'pokemon_detail' pokemon.id %}"> More Details </a> <br>
-				<a class="btn btn-outline-warning" href="#"> Favorite </a> <br>
+				<form action="{% url 'unfavorite_pokemon' pokemon.id %}" method="post">
+					{% csrf_token %}
+					<button type="submit" class="btn btn-outline-danger" > unfavorite </button> <br>
+				</form>
 			</div>
 		{% endfor %}
 	</div>

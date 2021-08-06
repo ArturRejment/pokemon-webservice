@@ -67,3 +67,15 @@ class AddPokemonToFavorite(LoginRequiredMixin, View):
 		user.favorite(pokemon[0])
 		return redirect(reverse('main_page'))
 
+
+class RemovePokemonFromFavorite(LoginRequiredMixin, View):
+
+	def post(self, request, **kwargs):
+		user = request.user
+		try:
+			pokemon = Pokemon.objects.get(pokemon_id = kwargs['id'])
+		except Pokemon.DoesNotExist:
+			raise ValueError('Pokemon with this id does not exist')
+		user.unfavorite(pokemon)
+		return redirect(reverse('favorite_pokemons'))
+
