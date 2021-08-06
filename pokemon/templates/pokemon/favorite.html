@@ -1,0 +1,25 @@
+{% extends 'pokemon/main.html' %}
+
+{% block content %}
+	<div class="container">
+		<div class="row" style="margin: 0; padding: 0;">
+			{% for pokemon in pokemon_data %}
+				<div class="col-lg-6 mt-4 mb-4">
+					<div class="box-element">
+						<h3>Pokemon name: {{pokemon.name}}</h3>
+						<h4>Pokemon id: {{pokemon.id}} </h4>
+						<h4>Pokemon types:
+						{% for type in pokemon.types %}
+							{{type}}
+						{% endfor %}
+					</div>
+					<a class="btn btn-outline-success" href="{% url 'pokemon_detail' pokemon.id %}"> More Details </a> <br>
+					<form action="{% url 'unfavorite_pokemon' pokemon.id %}" method="post">
+						{% csrf_token %}
+						<button type="submit" class="btn btn-outline-danger" > unfavorite </button> <br>
+					</form>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+{% endblock content %}
