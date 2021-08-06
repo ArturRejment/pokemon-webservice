@@ -6,7 +6,7 @@ from django.views import View
 from django.views.generic.base import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .utils import sendPokemonRequest
+from .utils import sendPokemonRequest, getEvolutionChain
 from authentication.models import User, Pokemon
 
 
@@ -38,8 +38,10 @@ class DetailPageView(LoginRequiredMixin, TemplateView):
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
 		pokemon_id = kwargs['id']
-		response = requests.get(f'https://pokeapi.co/api/v2/pokemon/{pokemon_id}').json()
+		response = requests.get(f'https://pokeapi.co/api/v2/pokemon/{pokemon_id}/').json()
+
 		context['pokemon_data'] = response
+		context['evolution_chain'] = getEvolutionChain(response)
 		return context
 
 

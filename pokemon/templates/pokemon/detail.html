@@ -1,13 +1,19 @@
 {% extends 'pokemon/main.html' %}
 
 {% block content %}
-<h1>Detail</h1>
-	{{pokemon_data.name}} <br>
-	{{pokemon_data.id}} <br>
-	{{pokemon_data.types}} <br>
-	{{pokemon_data.height}} <br>
-	{{pokemon_data.weight}} <br>
-	{{pokemon_data.stats}} <br>
-	{{pokemon_data.abilities}} <br>
-	<img src="{{pokemon_data.sprites.front_default}}">
+	<div class="container">
+		<img class="img-fluid" src="{{pokemon_data.sprites.front_default}}">
+		{{pokemon_data.name}} <br>
+		Id: {{pokemon_data.id}} <br>
+		Types: {% for type in pokemon_data.types %}{{type.type.name}} {% endfor %} <br>
+		Height: {{pokemon_data.height}} <br>
+		Weight: {{pokemon_data.weight}} <br>
+		Stats: {% for stat in pokemon_data.stats %}{{stat.base_stat}}: {{stat.stat.name}} <br> {% endfor %}
+		Abilities: {% for ability in pokemon_data.abilities %} {{ability.ability.name}}, {% endfor %}  <br>
+	</div>
+	{% for pokemon in evolution_chain %}
+		{{pokemon.name}}
+		<img class="img-fluid" src="{{pokemon.sprites.front_default}}">
+		<br>
+	{% endfor %}
 {% endblock content %}
