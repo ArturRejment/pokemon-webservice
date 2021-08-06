@@ -2,11 +2,12 @@ import requests
 
 from django.shortcuts import render
 from django.views.generic.base import TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .utils import sendPokemonRequest
 
 
-class MainPageView(TemplateView):
+class MainPageView(LoginRequiredMixin, TemplateView):
 	template_name = 'pokemon/index.html'
 
 	def get_context_data(self, **kwargs):
@@ -28,7 +29,7 @@ class MainPageView(TemplateView):
 		return context
 
 
-class DetailPageView(TemplateView):
+class DetailPageView(LoginRequiredMixin, TemplateView):
 	template_name = 'pokemon/detail.html'
 
 	def get_context_data(self, **kwargs):
