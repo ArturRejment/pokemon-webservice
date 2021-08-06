@@ -11,7 +11,7 @@ from authentication.models import User, Pokemon
 
 
 class MainPageView(LoginRequiredMixin, TemplateView):
-	template_name = 'pokemon/index.html'
+	template_name: str = 'pokemon/index.html'
 
 	def get_context_data(self, **kwargs):
 		# Get the context
@@ -33,7 +33,7 @@ class MainPageView(LoginRequiredMixin, TemplateView):
 
 
 class DetailPageView(LoginRequiredMixin, TemplateView):
-	template_name = 'pokemon/detail.html'
+	template_name: str = 'pokemon/detail.html'
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
@@ -46,7 +46,7 @@ class DetailPageView(LoginRequiredMixin, TemplateView):
 
 
 class FavoritePokemonsView(LoginRequiredMixin, TemplateView):
-	template_name = 'pokemon/favorite.html'
+	template_name: str = 'pokemon/favorite.html'
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
