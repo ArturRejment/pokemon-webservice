@@ -6,34 +6,24 @@ from django.views import View
 from django.views.generic.base import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .utils import sendPokemonRequest, getEvolutionChain
+from .utils import getPokemonsData, getEvolutionChain
+from .mixins import PaginateTemplateMixin
 from authentication.models import User, Pokemon
 
 
-class MainPageView(LoginRequiredMixin, TemplateView):
-	template_name = 'pokemon/index.html'
+class MainPageView(LoginRequiredMixin, PaginateTemplateMixin):
+	template_name: str = 'pokemon/index.html'
 
 	def get_context_data(self, **kwargs):
 		# Get the context
 		context = super().get_context_data(**kwargs)
-		# Set PokeAPI pagination
-		page = self.request.GET.get('page', 1)
-		offset = (int(page) * 10 - 9)
-		payload = {'limit':10, 'offset': offset}
-
-		# Make a list of fetched pokemons
-		pokemons_data = []
-		for num in range(offset, offset+10):
-			pokemon = sendPokemonRequest(num)
-			# Append data to the pokemons list
-			pokemons_data.append(pokemon)
-		# Add pokemons data to the context
-		context['pokemon_data'] = pokemons_data
+		response = context['response']
+		context['pokemon_data'] = getPokemonsData(response)
 		return context
 
 
 class DetailPageView(LoginRequiredMixin, TemplateView):
-	template_name = 'pokemon/detail.html'
+	template_name: str = 'pokemon/detail.html'
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
@@ -46,7 +36,7 @@ class DetailPageView(LoginRequiredMixin, TemplateView):
 
 
 class FavoritePokemonsView(LoginRequiredMixin, TemplateView):
-	template_name = 'pokemon/favorite.html'
+	template_name: str = 'pokemon/favorite.html'
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
@@ -55,7 +45,7 @@ class FavoritePokemonsView(LoginRequiredMixin, TemplateView):
 
 		pokemons_data = []
 		for element in queryset:
-			pokemon = sendPokemonRequest(element.pokemon_id)
+			pokemon = requests.get(f'https://pokeapi.co/api/v2/pokemon/{element.pokemon_id}/').json()
 			pokemons_data.append(pokemon)
 		context['pokemon_data'] = pokemons_data
 		return context

@@ -1,0 +1,29 @@
+.pokemon-list {
+	justify-content: space-between;
+}
+
+.pokemon-info {
+	border: 1px solid gray;
+	padding: 20px;
+	border-radius: 5px;
+	text-align: center;
+	margin-top: 20px;
+	margin-bottom: 20px;
+
+	.pokemon-type {
+		background-color: aquamarine;
+		width: fit-content;
+		padding: 10px 15px;
+	}
+
+	h2 {
+		font-weight: bold;
+		margin-top: 10px;
+		margin-bottom: 20px;
+	}
+
+	h4 {
+		margin-top: 20px;
+		margin-bottom: 20px;
+	}
+}
