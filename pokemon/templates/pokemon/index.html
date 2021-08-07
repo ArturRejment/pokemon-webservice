@@ -3,16 +3,17 @@
 
 {% block content %}
 	<div class="container">
+	<h1 class="pokemon-header main-header"> Pokemon </h1>
 		<div class="row pokemon-list">
 			{% for pokemon in pokemon_data %}
 				<div class="col-lg-5  pokemon-info">
 					<div>
 
-						<h2>{{pokemon.id}}. {{pokemon.name}} </h2>
+						<h2 class="pokemon-header">{{pokemon.id}}. {{pokemon.name}} </h2>
 
-						<h4> types:
+						<h4 class="pokemon-type">
 							{% for type in pokemon.types %}
-								{{type.type.name}}
+								<span class="{{type.type.name}}"> {{type.type.name}} </span>
 							{% endfor %}
 						</h4>
 					</div>
