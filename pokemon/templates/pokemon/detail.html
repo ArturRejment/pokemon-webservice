@@ -12,7 +12,7 @@
 		Abilities: {% for ability in pokemon_data.abilities %} {{ability.ability.name}}, {% endfor %}  <br>
 	</div>
 	{% for pokemon in evolution_chain %}
-		{{pokemon.name}}
+		<a href="{% url 'pokemon_detail' pokemon.id %}"> {{pokemon.name}} </a>
 		<img class="img-fluid" src="{{pokemon.sprites.front_default}}">
 		<br>
 	{% endfor %}

@@ -18,7 +18,8 @@ class MainPageView(LoginRequiredMixin, PaginateTemplateMixin):
 		# Get the context
 		context = super().get_context_data(**kwargs)
 		response = context['response']
-		context['pokemon_data'] = getPokemonsData(response)
+		url_list = [f'https://pokeapi.co/api/v2/pokemon/{element["name"]}' for element in response['results']]
+		context['pokemon_data'] = getPokemonsData(url_list, len(response['results']))
 		return context
 
 
@@ -29,7 +30,6 @@ class DetailPageView(LoginRequiredMixin, TemplateView):
 		context = super().get_context_data(**kwargs)
 		pokemon_id = kwargs['id']
 		response = requests.get(f'https://pokeapi.co/api/v2/pokemon/{pokemon_id}/').json()
-
 		context['pokemon_data'] = response
 		context['evolution_chain'] = getEvolutionChain(response)
 		return context
@@ -43,11 +43,9 @@ class FavoritePokemonsView(LoginRequiredMixin, TemplateView):
 		user = self.request.user
 		queryset = user.favorite_pokemons.all()
 
-		pokemons_data = []
-		for element in queryset:
-			pokemon = requests.get(f'https://pokeapi.co/api/v2/pokemon/{element.pokemon_id}/').json()
-			pokemons_data.append(pokemon)
-		context['pokemon_data'] = pokemons_data
+		url_list = [f'https://pokeapi.co/api/v2/pokemon/{element.pokemon_id}' for element in queryset]
+
+		context['pokemon_data'] = getPokemonsData(url_list, len(queryset))
 		return context
 
 
