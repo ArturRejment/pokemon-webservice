@@ -3,23 +3,24 @@
 
 {% block content %}
 	<div class="container">
-	<h1 class="pokemon-header main-header"> Pokemon </h1>
+		<div class="image-container">
+			<img class="pokemon-logo" src={% static '/images/logo.png' %}>
+		</div>
 		<div class="row pokemon-list">
 			{% for pokemon in pokemon_data %}
-				<div class="col-lg-5  pokemon-info">
+				<div class="col-lg-5  pokemon-info shadow">
 					<div>
-
 						<h2 class="pokemon-header">{{pokemon.id}}. {{pokemon.name}} </h2>
 
 						<h4 class="pokemon-type">
 							{% for type in pokemon.types %}
-								<span class="{{type.type.name}}"> {{type.type.name}} </span>
+								<span class="shadow {{type.type.name}}"> {{type.type.name}} </span>
 							{% endfor %}
 						</h4>
 					</div>
-					<div class="row">
-						<a class="col-3 btn btn-outline-success" href="{% url 'pokemon_detail' pokemon.id %}"> More Details </a> <br>
-						<form class="col-3" action="{% url 'favorite_pokemon' pokemon.id %}" method="post">
+					<div class="button-space">
+						<a class="btn btn-outline-warning" href="{% url 'pokemon_detail' pokemon.id %}"> More Details </a> <br>
+						<form action="{% url 'favorite_pokemon' pokemon.id %}" method="post">
 							{% csrf_token %}
 							<button type="submit" class="btn btn-outline-warning"> Favorite </button> <br>
 						</form>
