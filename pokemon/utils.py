@@ -1,13 +1,26 @@
 import requests
+from operator import itemgetter
+
+from .worker import ThreadPool
 
 
 def getPokemonsData(response) -> list:
-	pokemon_data = []
-	for element in response['results']:
-		pokemon = requests.get(f'https://pokeapi.co/api/v2/pokemon/{element["name"]}').json()
-		# Append data to the pokemons list
-		pokemon_data.append(pokemon)
-	return pokemon_data
+	size: int = len(response['results'])
+	pokemon_data = [f'https://pokeapi.co/api/v2/pokemon/{element["name"]}' for element in response['results']]
+	pool = ThreadPool(size)
+
+	r = requests.session()
+
+	results = []
+	def get(url):
+		resp = r.get(url)
+		results.append(resp.json())
+
+	pool.map(get, pokemon_data)
+	pool.wait_completion()
+	results = sorted(results, key = itemgetter('id'))
+
+	return results
 
 
 def getEvolutionChain(response) -> list:
