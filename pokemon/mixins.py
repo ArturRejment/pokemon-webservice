@@ -9,12 +9,10 @@ class PaginateTemplateMixin(TemplateView):
 		context = super().get_context_data(**kwargs)
 		page: int = int(self.request.GET.get('page', 1))
 		offset = (page*10 - 10)
-		response = requests.get(f'https://pokeapi.co/api/v2/pokemon/?offset={offset}&limit=10')
-		if not response.ok:
+		response = requests.get(f'https://pokeapi.co/api/v2/pokemon/?offset={offset}&limit=10').json()
+		if len(response['results']) == 0:
 			page = 1
 			response = requests.get('https://pokeapi.co/api/v2/pokemon/?offset=0&limit=10').json()
-		else:
-			response = response.json()
 		# Check if next page exists
 		if response['next'] is None:
 			context['next_page'] = None

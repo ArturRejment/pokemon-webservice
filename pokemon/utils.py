@@ -1,19 +1,13 @@
 import requests
 
 
-def sendPokemonRequest(num: int) -> dict:
-	dictionary: dict = {}
-	# Fetch single pokemon
-	response = requests.get(f'https://pokeapi.co/api/v2/pokemon/{num}').json()
-	# Get only necessary fields
-	dictionary['name'] = response['name']
-	dictionary['id'] = response['id']
-	types: list = []
-	# Create a list of pokemon's types
-	for type in response['types']:
-		types.append(type['type']['name'])
-	dictionary['types'] = types
-	return dictionary
+def getPokemonsData(response) -> list:
+	pokemon_data = []
+	for element in response['results']:
+		pokemon = requests.get(f'https://pokeapi.co/api/v2/pokemon/{element["name"]}').json()
+		# Append data to the pokemons list
+		pokemon_data.append(pokemon)
+	return pokemon_data
 
 
 def getEvolutionChain(response) -> list:

@@ -1,24 +1,31 @@
 {% extends 'pokemon/main.html' %}
+{% load static %}
 
 {% block content %}
-	<div class="row" style="margin: 0; padding: 0;">
-		{% for pokemon in pokemon_data %}
-			<div class="col-lg-6 mt-4 mb-4">
-				<div class="box-element">
-					<h3>Pokemon name: {{pokemon.name}}</h3>
-					<h4>Pokemon id: {{pokemon.id}} </h4>
-					<h4>Pokemon types:
-					{% for type in pokemon.types %}
-						{{type}}
-					{% endfor %}
+	<div class="container">
+		<div class="row pokemon-list">
+			{% for pokemon in pokemon_data %}
+				<div class="col-lg-5  pokemon-info">
+					<div>
+
+						<h2>{{pokemon.id}}. {{pokemon.name}} </h2>
+
+						<h4> types:
+							{% for type in pokemon.types %}
+								{{type.type.name}}
+							{% endfor %}
+						</h4>
+					</div>
+					<div class="row">
+						<a class="col-3 btn btn-outline-success" href="{% url 'pokemon_detail' pokemon.id %}"> More Details </a> <br>
+						<form class="col-3" action="{% url 'favorite_pokemon' pokemon.id %}" method="post">
+							{% csrf_token %}
+							<button type="submit" class="btn btn-outline-warning"> Favorite </button> <br>
+						</form>
+					</div>
 				</div>
-				<a class="btn btn-outline-success" href="{% url 'pokemon_detail' pokemon.id %}"> More Details </a> <br>
-				<form action="{% url 'favorite_pokemon' pokemon.id %}" method="post">
-					{% csrf_token %}
-					<button type="submit" class="btn btn-outline-warning"> Favorite </button> <br>
-				</form>
-			</div>
-		{% endfor %}
+			{% endfor %}
+		</div>
 	</div>
 
 	<nav aria-label="Page navigation example">

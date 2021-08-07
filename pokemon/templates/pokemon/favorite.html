@@ -10,14 +10,16 @@
 						<h4>Pokemon id: {{pokemon.id}} </h4>
 						<h4>Pokemon types:
 						{% for type in pokemon.types %}
-							{{type}}
+							{{type.type.name}}
 						{% endfor %}
 					</div>
-					<a class="btn btn-outline-success" href="{% url 'pokemon_detail' pokemon.id %}"> More Details </a> <br>
-					<form action="{% url 'unfavorite_pokemon' pokemon.id %}" method="post">
-						{% csrf_token %}
-						<button type="submit" class="btn btn-outline-danger" > unfavorite </button> <br>
-					</form>
+					<div class="row">
+						<a class="btn btn-outline-success col-4" href="{% url 'pokemon_detail' pokemon.id %}"> More Details </a> <br>
+						<form class="col-4" action="{% url 'unfavorite_pokemon' pokemon.id %}" method="post">
+							{% csrf_token %}
+							<button type="submit" class="btn btn-outline-danger" > unfavorite </button> <br>
+						</form>
+					</div>
 				</div>
 			{% endfor %}
 		</div>
