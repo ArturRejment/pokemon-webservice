@@ -1,19 +1,66 @@
 {% extends 'pokemon/main.html' %}
 
 {% block content %}
-	<div class="container">
-		<img class="img-fluid" src="{{pokemon_data.sprites.front_default}}">
-		{{pokemon_data.name}} <br>
-		Id: {{pokemon_data.id}} <br>
-		Types: {% for type in pokemon_data.types %}{{type.type.name}} {% endfor %} <br>
-		Height: {{pokemon_data.height}} <br>
-		Weight: {{pokemon_data.weight}} <br>
-		Stats: {% for stat in pokemon_data.stats %}{{stat.base_stat}}: {{stat.stat.name}} <br> {% endfor %}
-		Abilities: {% for ability in pokemon_data.abilities %} {{ability.ability.name}}, {% endfor %}  <br>
+	<div class="container detail__container">
+		<div class="pokemon-detail">
+			<img class="img-fluid" src="{{pokemon_data.sprites.front_default}}">
+			<span class="pokemon-header-detail">{{pokemon_data.id}}. {{pokemon_data.name}} </span>
+		</div>
+
+		<h4 class="pokemon-type">
+			{% for type in pokemon_data.types %}
+				<span class="{{type.type.name}} shadow"> {{type.type.name}} </span>
+			{% endfor %}
+		</h4>
+
+		<span class="detail__container__height"> Height: {{pokemon_data.height}} </span>
+		<span class="detail__container__weight"> Weight: {{pokemon_data.weight}} </span>
+		<div class="detail__container__stats">
+			<table class="table">
+				<thead>
+					<tr>
+						<th scope="col"> Statistic </th>
+						<th scope="col"> Value </th>
+					</tr>
+				</thead>
+				<tbody>
+				{% for stat in pokemon_data.stats %}
+					<tr>
+						<th scope="row"> {{stat.stat.name}} </th>
+						<th scope="row"> {{stat.base_stat}} </th>
+					</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
+		<div class="detail__container__abilities">
+			<table class="table">
+				<thead>
+					<tr>
+						<th scope="col"> Ability </th>
+						<th scope="col"> Hidden </th>
+					</tr>
+				</thead>
+				<tbody>
+				{% for ability in pokemon_data.abilities %}
+					<tr>
+						<th scope="row"> {{ability.ability.name}} </th>
+						<th scope="row"> {{ability.is_hidden}} </th>
+					</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	<h1 class="pokemon-header chain-header"> Evolution chain </h1>
 	</div>
-	{% for pokemon in evolution_chain %}
-		<a href="{% url 'pokemon_detail' pokemon.id %}"> {{pokemon.name}} </a>
-		<img class="img-fluid" src="{{pokemon.sprites.front_default}}">
-		<br>
-	{% endfor %}
+	<div class="container pokemon_chain">
+		{% for pokemon in evolution_chain %}
+			<div class="pokemon_chain__element">
+				<a href="{% url 'pokemon_detail' pokemon.id %}">
+					<img class="img-fluid" src="{{pokemon.sprites.front_default}}">
+					<span class="pokemon-header"> {{pokemon.name}} </span>
+				</a>
+			</div>
+		{% endfor %}
+	</div>
 {% endblock content %}
