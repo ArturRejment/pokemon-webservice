@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+from .keys import DB_PASS
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -79,8 +80,12 @@ WSGI_APPLICATION = 'webservice.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'pokemon',
+        'USER': 'postgres',
+        'PASSWORD': DB_PASS,
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
