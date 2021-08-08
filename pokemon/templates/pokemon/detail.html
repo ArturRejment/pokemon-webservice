@@ -21,7 +21,7 @@
 		{% else %}
 			<form action="{% url 'favorite_pokemon' pokemon_data.id %}" method="post">
 				{% csrf_token %}
-				<button type="submit" class="btn btn-outline-warning" > favorite </button> <br>
+				<button type="submit" class="btn btn-outline-success" > favorite </button> <br>
 			</form>
 		{% endif %}
 
@@ -65,14 +65,16 @@
 		</div>
 	<h1 class="pokemon-header chain-header"> Evolution chain </h1>
 	</div>
-	<div class="container pokemon_chain">
-		{% for pokemon in evolution_chain %}
-			<div class="pokemon_chain__element">
-				<a href="{% url 'pokemon_detail' pokemon.id %}">
-					<img class="img-fluid" src="{{pokemon.sprites.front_default}}">
-					<span class="pokemon-header"> {{pokemon.name}} </span>
-				</a>
-			</div>
-		{% endfor %}
+	<div class="container ">
+		<div class="row pokemon_chain">
+			{% for pokemon in evolution_chain %}
+				<div class="pokemon_chain__element col-12 col-md-4">
+					<a href="{% url 'pokemon_detail' pokemon.id %}">
+						<img class="img-fluid" src="{{pokemon.sprites.front_default}}">
+						<span class="pokemon-header"> {{pokemon.name}} </span>
+					</a>
+				</div>
+			{% endfor %}
+		</div>
 	</div>
 {% endblock content %}

@@ -214,3 +214,9 @@ body {
 	font-size: 40px;
 	color: $cusotm-dark-blue;
 }
+
+.bottom-navbar {
+	li a {
+		color: $cusotm-dark-blue !important;
+	}
+}

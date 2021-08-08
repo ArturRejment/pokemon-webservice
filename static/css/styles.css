@@ -236,4 +236,8 @@ body {
   font-size: 40px;
   color: #333652;
 }
+
+.bottom-navbar li a {
+  color: #333652 !important;
+}
 /*# sourceMappingURL=styles.css.map */

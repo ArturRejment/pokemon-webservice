@@ -38,13 +38,13 @@
 	</div>
 
 	<nav aria-label="Page navigation example">
-		<ul class="pagination justify-content-center mt-4">
+		<ul class="pagination justify-content-center mt-4 bottom-navbar">
 			<li class="page-item {% if previous_page is None %}disabled{% endif %}">
 				<a class="page-link" href="{% url 'main_page' %}?page={{previous_page}}" >Previous</a>
 			</li>
 			<li class="page-item"><a class="page-link" href="#">{{current_page}}</a></li>
-			<li class="page-item">
-				<a class="page-link" {% if next_page is None %}aria-disabled="true"{% endif %} href="{% url 'main_page' %}?page={{next_page}}">Next</a>
+			<li class="page-item {% if next_page is None %} disabled {% endif %}">
+				<a class="page-link"  href="{% url 'main_page' %}?page={{next_page}}">Next</a>
 			</li>
 		</ul>
 	</nav>
