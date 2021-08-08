@@ -19,7 +19,7 @@ class MainPageView(LoginRequiredMixin, PaginateTemplateMixin):
 		context = super().get_context_data(**kwargs)
 		response = context['response']
 		url_list = [f'https://pokeapi.co/api/v2/pokemon/{element["name"]}' for element in response['results']]
-		context['pokemon_data'] = getPokemonsData(url_list, len(response['results']))
+		context['pokemon_data'] = getPokemonsData(self.request.user, url_list, len(response['results']))
 		return context
 
 
@@ -30,8 +30,13 @@ class DetailPageView(LoginRequiredMixin, TemplateView):
 		context = super().get_context_data(**kwargs)
 		pokemon_id = kwargs['id']
 		response = requests.get(f'https://pokeapi.co/api/v2/pokemon/{pokemon_id}/').json()
+		try:
+			pokemon = Pokemon.objects.get(pokemon_id = response['id'])
+			context['is_favorite_pokemon'] = self.request.user.is_favorite(pokemon)
+		except Pokemon.DoesNotExist:
+			context['is_favorite_pokemon'] = False
 		context['pokemon_data'] = response
-		context['evolution_chain'] = getEvolutionChain(response)
+		context['evolution_chain'] = getEvolutionChain(self.request.user, response)
 		return context
 
 
@@ -45,7 +50,7 @@ class FavoritePokemonsView(LoginRequiredMixin, TemplateView):
 
 		url_list = [f'https://pokeapi.co/api/v2/pokemon/{element.pokemon_id}' for element in queryset]
 
-		context['pokemon_data'] = getPokemonsData(url_list, len(queryset))
+		context['pokemon_data'] = getPokemonsData(self.request.user, url_list, len(queryset))
 		return context
 
 

@@ -16,6 +16,10 @@ class User(AbstractUser):
 		""" Remove specific pokemon from favorites """
 		self.favorite_pokemons.remove(pokemon)
 
+	def is_favorite(self, pokemon):
+		""" Returns True if pokemon is user's favorite. False otherwise """
+		return self.favorite_pokemons.filter(pokemon_id = pokemon.pokemon_id).exists()
+
 
 class Pokemon(models.Model):
 	pokemon_id = models.PositiveIntegerField(primary_key=True, unique=True, null=False, blank=False)

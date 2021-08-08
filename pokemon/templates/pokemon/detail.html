@@ -4,7 +4,7 @@
 	<div class="container detail__container">
 		<div class="pokemon-detail">
 			<img class="img-fluid" src="{{pokemon_data.sprites.front_default}}">
-			<span class="pokemon-header-detail">{{pokemon_data.id}}. {{pokemon_data.name}} </span>
+			<span class="pokemon-header-detail">{{pokemon_data.id}}. {{pokemon_data.name}}</span>
 		</div>
 
 		<h4 class="pokemon-type">
@@ -12,6 +12,18 @@
 				<span class="{{type.type.name}} shadow"> {{type.type.name}} </span>
 			{% endfor %}
 		</h4>
+
+		{% if is_favorite_pokemon %}
+			<form action="{% url 'favorite_pokemon' pokemon_data.id %}" method="post">
+					{% csrf_token %}
+					<button type="submit" class="btn btn-outline-danger" > unfavorite </button>
+			</form>
+		{% else %}
+			<form action="{% url 'unfavorite_pokemon' pokemon_data.id %}" method="post">
+				{% csrf_token %}
+				<button type="submit" class="btn btn-outline-danger" > unfavorite </button> <br>
+			</form>
+		{% endif %}
 
 		<span class="detail__container__height"> Height: {{pokemon_data.height}} dm</span>
 		<span class="detail__container__weight"> Weight: {{pokemon_data.weight}} hg</span>
