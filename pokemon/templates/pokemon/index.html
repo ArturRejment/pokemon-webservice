@@ -20,10 +20,17 @@
 					</div>
 					<div class="button-space">
 						<a class="btn btn-outline-warning" href="{% url 'pokemon_detail' pokemon.id %}"> More Details </a> <br>
+						{% if pokemon.is_favorite_pokemon %}
+							<form action="{% url 'unfavorite_pokemon' pokemon.id %}" method="post">
+								{% csrf_token %}
+								<button type="submit" onclick="myFunction({{pokemon.id}})" class="btn btn-outline-danger" > unfavorite </button>
+							</form>
+						{% else %}
 						<form action="{% url 'favorite_pokemon' pokemon.id %}" method="post">
 							{% csrf_token %}
-							<button type="submit" class="btn btn-outline-warning"> Favorite </button> <br>
+							<button type="submit" class="btn btn-outline-warning" > favorite </button> <br>
 						</form>
+						{% endif %}
 					</div>
 				</div>
 			{% endfor %}

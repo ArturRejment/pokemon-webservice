@@ -2,9 +2,10 @@ import requests
 from operator import itemgetter
 
 from .worker import ThreadPool
+from authentication.models import Pokemon
 
 
-def getPokemonsData(url_list: list, pool_size: int) -> list:
+def getPokemonsData(user, url_list: list, pool_size: int) -> list:
 	""" A function to send requests using threads in order to retrieve details about pokomons """
 
 	# New ThreadPool
@@ -15,8 +16,15 @@ def getPokemonsData(url_list: list, pool_size: int) -> list:
 	results = []
 	# Declare new fuction to send requests and store the results
 	def get(url):
-		resp = r.get(url)
-		results.append(resp.json())
+		resp = r.get(url).json()
+		# Check if pokemon is user's favorite
+		try:
+			pokemon = Pokemon.objects.get(pokemon_id=resp['id'])
+		except Pokemon.DoesNotExist:
+			resp['is_favorite_pokemon'] = False
+		else:
+			resp['is_favorite_pokemon'] = user.is_favorite(pokemon)
+		results.append(resp)
 	# Map every url with the 'get' function
 	pool.map(get, url_list)
 	# Wait untill all of the threads are completed
@@ -27,7 +35,7 @@ def getPokemonsData(url_list: list, pool_size: int) -> list:
 	return results
 
 
-def getEvolutionChain(response) -> list:
+def getEvolutionChain(user, response) -> list:
 	""" Handle evelution chain creation """
 	# Get pokemon species url - necessary to fetch proper evolution chain
 	pokemon_species_url = response['species']['url']
@@ -51,4 +59,4 @@ def getEvolutionChain(response) -> list:
 		evolution_chain_urls.append(f'https://pokeapi.co/api/v2/pokemon/{name}/')
 		evolves_to = evolves_to[0]['evolves_to']
 	# Return list with entire data about all pokemons available in evelution chain
-	return getPokemonsData(evolution_chain_urls, len(evolution_chain_urls))
+	return getPokemonsData(user, evolution_chain_urls, len(evolution_chain_urls))
