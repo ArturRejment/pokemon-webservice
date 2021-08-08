@@ -16,6 +16,7 @@ Connection with API is made with Python's REQUESTS library (https://docs.python-
 - Create locally new Postgres database
 - With code editor open `webservice/settings.py`
 - Find a dictionary named `DATABASES` and change credentials to match with your database
+- At the top of this file find line `from .keys import DB_PASS` and comment it out
 - Migrate models to the database with `py manage.py migrate`
 - Run server with `py manage.py runserver`
 
