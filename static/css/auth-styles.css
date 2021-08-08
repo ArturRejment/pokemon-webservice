@@ -1,0 +1,77 @@
+@font-face {
+  src: url(fonts/Pokemon_Solid.ttf);
+  font-family: poke;
+}
+
+body {
+  background-color: #c7c7cc;
+}
+
+.header {
+  font-family: poke;
+  letter-spacing: 5px;
+  color: #333652;
+}
+
+img {
+  width: 400px;
+  height: auto;
+}
+
+input {
+  border: 2px solid #333652;
+  border-radius: 20px;
+  width: 225px;
+  height: 50px;
+  outline: none;
+}
+
+.login-section {
+  height: 100vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  text-align: center;
+}
+
+.login-section form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.login-section form input {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+button {
+  padding-bottom: 3px;
+  width: 150px;
+  height: 40px;
+  border-radius: 10px;
+  font-size: 18px;
+  background-color: #FFCC01;
+  border: 3px solid #2576BC;
+}
+/*# sourceMappingURL=auth-styles.css.map */
