@@ -18,19 +18,20 @@ def getPokemonsData(user, url_list: list, pool_size: int) -> list:
 	def get(url):
 		resp = r.get(url).json()
 		# Check if pokemon is user's favorite
-		try:
-			pokemon = Pokemon.objects.get(pokemon_id=resp['id'])
-		except Pokemon.DoesNotExist:
-			resp['is_favorite_pokemon'] = False
-		else:
-			resp['is_favorite_pokemon'] = user.is_favorite(pokemon)
 		results.append(resp)
 	# Map every url with the 'get' function
 	pool.map(get, url_list)
 	# Wait untill all of the threads are completed
 	pool.wait_completion()
 	# Sort the resutls growingly by pokemon id
-	results = sorted(results, key = itemgetter('id'))
+	results = sorted(results, key=itemgetter('id'))
+	for item in results:
+		try:
+			pokemon = Pokemon.objects.get(pokemon_id=item['id'])
+		except Pokemon.DoesNotExist:
+			item['is_favorite_pokemon'] = False
+		else:
+			item['is_favorite_pokemon'] = user.is_favorite(pokemon)
 
 	return results
 
