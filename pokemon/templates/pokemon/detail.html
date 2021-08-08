@@ -14,14 +14,14 @@
 		</h4>
 
 		{% if is_favorite_pokemon %}
-			<form action="{% url 'favorite_pokemon' pokemon_data.id %}" method="post">
+			<form action="{% url 'unfavorite_pokemon' pokemon_data.id %}" method="post">
 					{% csrf_token %}
 					<button type="submit" class="btn btn-outline-danger" > unfavorite </button>
 			</form>
 		{% else %}
-			<form action="{% url 'unfavorite_pokemon' pokemon_data.id %}" method="post">
+			<form action="{% url 'favorite_pokemon' pokemon_data.id %}" method="post">
 				{% csrf_token %}
-				<button type="submit" class="btn btn-outline-danger" > unfavorite </button> <br>
+				<button type="submit" class="btn btn-outline-warning" > favorite </button> <br>
 			</form>
 		{% endif %}
 

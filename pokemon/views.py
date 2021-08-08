@@ -60,7 +60,7 @@ class AddPokemonToFavorite(LoginRequiredMixin, View):
 		user = request.user
 		pokemon = Pokemon.objects.get_or_create(pokemon_id = kwargs['id'])
 		user.favorite(pokemon[0])
-		return redirect(reverse('main_page'))
+		return redirect(request.META.get('HTTP_REFERER'))
 
 
 class RemovePokemonFromFavorite(LoginRequiredMixin, View):
@@ -72,5 +72,5 @@ class RemovePokemonFromFavorite(LoginRequiredMixin, View):
 		except Pokemon.DoesNotExist:
 			raise ValueError('Pokemon with this id does not exist')
 		user.unfavorite(pokemon)
-		return redirect(reverse('favorite_pokemons'))
+		return redirect(request.META.get('HTTP_REFERER'))
 

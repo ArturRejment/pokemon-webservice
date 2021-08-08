@@ -23,7 +23,7 @@
 						{% if pokemon.is_favorite_pokemon %}
 							<form action="{% url 'unfavorite_pokemon' pokemon.id %}" method="post">
 								{% csrf_token %}
-								<button type="submit" class="btn btn-outline-danger" > unfavorite </button>
+								<button type="submit" onclick="myFunction({{pokemon.id}})" class="btn btn-outline-danger" > unfavorite </button>
 							</form>
 						{% else %}
 						<form action="{% url 'favorite_pokemon' pokemon.id %}" method="post">
