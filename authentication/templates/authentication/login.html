@@ -1,18 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
-</head>
-<body>
-	<h1>Login View</h1>
-	<form method="POST">
-		{% csrf_token %}
-		{{form.as_p}}
-		<input type="submit" value="Login">
-	</form>
-	<p>You need an account? <a href="{% url 'register'%}">Sign up</a></p>
-</body>
-</html>
+{% extends 'authentication/main.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<div class="container">
+
+	<div class="login-section">
+		<h1 class="header">Log in and Catch 'em all!</h1>
+		<img class="pokemon-logo" src={% static '/images/logo.png' %}>
+		<form autocomplete="off" method="POST">
+			{% csrf_token %}
+			{{form.username}}
+			{{form.password}}
+			<button type="submit" class="shadow"> Login </button>
+		</form>
+			<p>You need an account? <a href="{% url 'register'%}">Sign up</a></p>
+		</div>
+	<div class="hero-section">
+
+	</div>
+
+</div>
+{% endblock content %}

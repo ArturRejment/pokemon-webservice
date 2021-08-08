@@ -3,8 +3,13 @@
   font-family: poke;
 }
 
+body {
+  background-color: #c7c7cc;
+  font-family: 'Noto Serif', serif;
+}
+
 .grass {
-  background-color: green !important;
+  background-color: #148014 !important;
 }
 
 .poison {
@@ -12,7 +17,49 @@
 }
 
 .fire {
-  background-color: red !important;
+  background-color: #d32b2b !important;
+}
+
+.water {
+  background-color: #4444fd !important;
+}
+
+.electric {
+  background-color: #FAD02C !important;
+}
+
+.ground {
+  background-color: #7a4827 !important;
+}
+
+.fav-header {
+  margin: 50px 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
+.fav-header h1 {
+  margin: 50px 50px;
+  font-size: 60px;
+  margin: auto auto;
+  color: #333652;
+}
+
+.image-container {
+  text-align: center;
+}
+
+.image-container .pokemon-logo {
+  width: 40%;
+  height: auto;
+  text-align: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: 50px auto;
 }
 
 .pokemon-list {
@@ -30,19 +77,53 @@
 .pokemon-header {
   font-family: poke;
   letter-spacing: 5px;
+  color: #FFCC01;
+}
+
+.pokemon-detail {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.pokemon-detail span {
+  margin: 15px 0 0 20px;
+  font-family: poke;
+  letter-spacing: 5px;
+  color: #333652;
+  font-size: 50px;
+}
+
+.pokemon-detail img {
+  width: 125px;
 }
 
 .pokemon-info {
   border: 1px solid gray;
   padding: 20px;
-  border-radius: 5px;
+  border-radius: 10px;
   text-align: center;
   margin-top: 20px;
   margin-bottom: 20px;
+  background-color: #333652;
 }
 
-.pokemon-info .pokemon-type {
-  margin-top: 40px;
+.pokemon-info .button-space {
+  margin: 0 0 20px 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
 }
 
 .pokemon-info h2 {
@@ -56,10 +137,103 @@
   margin-bottom: 20px;
 }
 
-.pokemon-info span {
+.detail__container {
+  text-align: center;
+}
+
+.detail__container__height {
+  font-size: 24px;
+}
+
+.detail__container__weight {
+  font-size: 24px;
+  margin-left: 20px;
+}
+
+.detail__container__stats {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.detail__container__stats table {
+  width: 50vw;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.detail__container__stats table th {
+  width: 50%;
+}
+
+.detail__container__abilities {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.detail__container__abilities table {
+  width: 50vw;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.detail__container__abilities table th {
+  width: 50%;
+}
+
+.pokemon-type {
+  margin: 40px 0 !important;
+}
+
+.pokemon-type span {
   padding: 3px 10px;
   margin-left: 7px;
   border-radius: 5px;
-  background-color: aqua;
+  background-color: #5f7385;
+}
+
+.pokemon_chain {
+  margin-bottom: 40px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.pokemon_chain__element a {
+  text-decoration: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  text-align: center;
+}
+
+.pokemon_chain__element a span {
+  color: #333652;
+  font-size: 24px;
+}
+
+.pokemon_chain__element a img {
+  width: 125px;
+}
+
+.chain-header {
+  margin: 50px 0;
+  font-family: poke;
+  font-size: 40px;
+  color: #333652;
 }
 /*# sourceMappingURL=styles.css.map */
