@@ -18,8 +18,11 @@ class MainPageView(LoginRequiredMixin, PaginateTemplateMixin):
 		# Get the context
 		context = super().get_context_data(**kwargs)
 		response = context['response']
-		url_list = [f'https://pokeapi.co/api/v2/pokemon/{element["name"]}' for element in response['results']]
-		context['pokemon_data'] = getPokemonsData(self.request.user, url_list, len(response['results']))
+		url_list = [
+			f'https://pokeapi.co/api/v2/pokemon/{element["name"]}' for element in response['results']
+		]
+		context['pokemon_data'] = getPokemonsData(self.request.user,
+												  url_list, len(response['results']))
 		return context
 
 
@@ -29,7 +32,9 @@ class DetailPageView(LoginRequiredMixin, TemplateView):
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
 		pokemon_id = kwargs['id']
-		response = requests.get(f'https://pokeapi.co/api/v2/pokemon/{pokemon_id}/').json()
+		response = requests.get(
+			f'https://pokeapi.co/api/v2/pokemon/{pokemon_id}/'
+		).json()
 		try:
 			pokemon = Pokemon.objects.get(pokemon_id = response['id'])
 			context['is_favorite_pokemon'] = self.request.user.is_favorite(pokemon)
@@ -47,14 +52,19 @@ class FavoritePokemonsView(LoginRequiredMixin, TemplateView):
 		context = super().get_context_data(**kwargs)
 		user = self.request.user
 		queryset = user.favorite_pokemons.all()
-
-		url_list = [f'https://pokeapi.co/api/v2/pokemon/{element.pokemon_id}' for element in queryset]
-
+		# Create list with urls for user's favorite pokemons
+		url_list = [
+			f'https://pokeapi.co/api/v2/pokemon/{element.pokemon_id}' for element in queryset
+		]
+		# Add pokemons data to the context
 		context['pokemon_data'] = getPokemonsData(self.request.user, url_list, len(queryset))
 		return context
 
 
 class AddPokemonToFavorite(LoginRequiredMixin, View):
+	""" View responsible for adding pokemon to favorites
+	and redirecting to the previous site.
+	"""
 
 	def post(self, request, **kwargs):
 		user = request.user
@@ -64,6 +74,9 @@ class AddPokemonToFavorite(LoginRequiredMixin, View):
 
 
 class RemovePokemonFromFavorite(LoginRequiredMixin, View):
+	""" View responsible for removing pokemon from favorites
+	and redirecting to the previous site.
+	"""
 
 	def post(self, request, **kwargs):
 		user = request.user

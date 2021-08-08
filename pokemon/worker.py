@@ -18,10 +18,11 @@ class Worker(Thread):
 			try:
 				func(*args, **kargs)
 			except Exception as e:
-				# An exception happened in this thread
+				# An exception happened in this thread.
 				print(e)
 			finally:
-				# Mark this task as done, whether an exception happened or not
+				# Mark this task as done,
+				# whether an exception happened or not.
 				self.tasks.task_done()
 
 

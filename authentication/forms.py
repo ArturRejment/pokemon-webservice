@@ -6,7 +6,8 @@ from .models import User
 class RegisterForm(UserCreationForm):
 	""" Inherite from UserCreationForm in order to add
 	new field "email", because UserCreationFrom does not
-	support this field. """
+	support this field by default.
+	"""
 	email = forms.EmailField(label="Email")
 
 	class Meta:
@@ -21,7 +22,7 @@ class RegisterForm(UserCreationForm):
 		self.fields['password2'].widget.attrs.update({'placeholder': 're-password',})
 
 	def save(self, commit=True):
-		""" Override save function to save also email """
+		""" Override save function to save also email field """
 		user = super(RegisterForm, self).save(commit=False)
 		user.email = self.cleaned_data["email"]
 		if commit:
