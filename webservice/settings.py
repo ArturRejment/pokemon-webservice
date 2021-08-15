@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
-from .keys import DB_PASS
+from .keys import DB_PASS, DJANGO_KEY
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-@js7&hi#8d5_k*b*00t6sd&z(27k_a$-dg$3*5h6r+z$t*+co3'
+SECRET_KEY = DJANGO_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -81,11 +81,24 @@ WSGI_APPLICATION = 'webservice.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'pokemon',
+        'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': DB_PASS,
-        'HOST': 'localhost',
+        'HOST': 'pokedb',
         'PORT': '5432',
+    }
+}
+
+REDIS_HOST = os.environ.get('REDIS_HOST', '127.0.0.1')
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": f"redis://{REDIS_HOST}:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+        },
+        "KEY_PREFIX": "example"
     }
 }
 
