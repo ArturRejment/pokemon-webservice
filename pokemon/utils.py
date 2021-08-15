@@ -1,8 +1,32 @@
 import requests
 from operator import itemgetter
 
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
+from django.core.cache import cache
+from django.conf import settings
+
 from .worker import ThreadPool
 from authentication.models import Pokemon
+
+CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
+
+def getPokemonData(user, pokemon_id: int):
+	"""Retrieve cached information about Pokemon with Redis or
+	send request and cache it if is not present
+
+	Args:
+		user (User): User instance fetched from request
+		pokemon_id (int): Id of pokemon whose data is going to be
+						  fetched
+	"""
+	if cache.get(pokemon_id):
+		pokemon = cache.get(pokemon_id)
+		print('POKEMON FROM CACHE')
+	else:
+		pokemon = requests.get(f'https://pokeapi.co/api/v2/pokemon/{pokemon_id}').json()
+		cache.set(pokemon_id, pokemon)
+		print('POKEMON FROM REQUEST')
+	return pokemon
 
 
 def getPokemonsData(user, url_list: list, pool_size: int) -> list:

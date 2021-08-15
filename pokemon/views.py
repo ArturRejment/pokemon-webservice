@@ -6,7 +6,7 @@ from django.views import View
 from django.views.generic.base import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .utils import getPokemonsData, getEvolutionChain
+from .utils import getPokemonsData, getEvolutionChain, getPokemonData
 from .mixins import PaginateTemplateMixin
 from authentication.models import User, Pokemon
 
@@ -23,6 +23,7 @@ class MainPageView(LoginRequiredMixin, PaginateTemplateMixin):
 		]
 		context['pokemon_data'] = getPokemonsData(self.request.user,
 												  url_list, len(response['results']))
+		getPokemonData(self.request.user, 1)
 		return context
 
 
