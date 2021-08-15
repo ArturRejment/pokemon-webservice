@@ -10,7 +10,7 @@ from authentication.models import Pokemon
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
-def getPokemonsCachedData(user, pokemons_name_list: int):
+def getPokemonsCachedData(user, pokemons_name_list: int) -> list:
 	"""Retrieve cached information about Pokemon with Redis or
 	send request and cache it if is not present
 

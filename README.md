@@ -9,15 +9,20 @@ Connection with API is made with Python's REQUESTS library (https://docs.python-
 
 ## How to run?
 
-- Clone this repo and open its directory in terminal
-- Create a new virtual environment with `py -m venv env`
-- Activate virtual environment with `env\Scripts\activate.bat`
-- Install necessary libraries with `pip install -r requirements.txt`
-- Create locally new Postgres database
+First of all, make sure that you have Docker installed.
+
+- Clone this repo
 - With code editor open `webservice/settings.py`
-- Find a dictionary named `DATABASES` and change credentials to match with your database
 - At the top of this file find line `from .keys import DB_PASS` and comment it out
-- Migrate models to the database with `py manage.py migrate`
+- In terminal hit `docker-compose run pokeserver`
+- Close running process with `Ctrl + C`
+- Run server with `docker-compose up`
+- Open new terminal
+- Go to the server container with `docker exec -it pokeserver bash`
+- Migrate database with `python manage.py migrate`
 - Run server with `py manage.py runserver`
 
 Now you can open a browser on http://127.0.0.1:8000/, create an account and start browsing Pokemons!
+
+You can find alternative way to run application without Docker [here]
+You can preview the website [here]
