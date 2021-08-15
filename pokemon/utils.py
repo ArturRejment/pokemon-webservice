@@ -10,7 +10,7 @@ from authentication.models import Pokemon
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
-def getPokemonData(user, pokemon_id: int):
+def getPokemonsCachedData(user, pokemons_name_list: int):
 	"""Retrieve cached information about Pokemon with Redis or
 	send request and cache it if is not present
 
@@ -19,14 +19,18 @@ def getPokemonData(user, pokemon_id: int):
 		pokemon_id (int): Id of pokemon whose data is going to be
 						  fetched
 	"""
-	if cache.get(pokemon_id):
-		pokemon = cache.get(pokemon_id)
-		print('POKEMON FROM CACHE')
-	else:
-		pokemon = requests.get(f'https://pokeapi.co/api/v2/pokemon/{pokemon_id}').json()
-		cache.set(pokemon_id, pokemon)
-		print('POKEMON FROM REQUEST')
-	return pokemon
+	pokemons_data = []
+	for pokemon_name in pokemons_name_list:
+		# Try to retrieve pokemon form cache
+		if cache.get(pokemon_name):
+			pokemon = cache.get(pokemon_name)
+		else:
+		# If pokemon does not exist in cache
+		# Send request to obtain data and save it to the cache
+			pokemon = requests.get(f'https://pokeapi.co/api/v2/pokemon/{pokemon_name}').json()
+			cache.set(pokemon_name, pokemon)
+		pokemons_data.append(pokemon)
+	return pokemons_data
 
 
 def getPokemonsData(user, url_list: list, pool_size: int) -> list:
