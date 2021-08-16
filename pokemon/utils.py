@@ -92,18 +92,18 @@ def getEvolutionChain(user, response) -> list:
 	# Fetch data about evolution chain.
 	pokemon_evolution_chain = requests.get(pokemon_evolution_chain_url).json()
 	# Create a list to store urls of every pokemon present in the chain.
-	evolution_chain_urls = []
+	evolution_chain_names = []
 	# Create url for first pokemon in the chain.
 	evolves_to = pokemon_evolution_chain['chain']
-	evolution_chain_urls.append(
-		f'https://pokeapi.co/api/v2/pokemon/{evolves_to["species"]["name"]}/'
+	evolution_chain_names.append(
+		evolves_to["species"]["name"]
 	)
 	# Fetch other pokemons present in the chain as long as they exist.
 	evolves_to = evolves_to['evolves_to']
 	while len(evolves_to) != 0:
 		name = evolves_to[0]['species']['name']
 		# Fetch data about specific pokemon in the chain.
-		evolution_chain_urls.append(f'https://pokeapi.co/api/v2/pokemon/{name}/')
+		evolution_chain_names.append(name)
 		evolves_to = evolves_to[0]['evolves_to']
 	# Return list with data about all pokemons in evelution chain.
-	return getPokemonsData(user, evolution_chain_urls, len(evolution_chain_urls))
+	return getPokemonsCachedData(user, evolution_chain_names)
