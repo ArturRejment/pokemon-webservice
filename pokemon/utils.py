@@ -29,11 +29,18 @@ def getPokemonsCachedData(user, pokemons_name_list: int) -> list:
 		# Send request to obtain data and save it to the cache
 			pokemon = requests.get(f'https://pokeapi.co/api/v2/pokemon/{pokemon_name}').json()
 			cache.set(pokemon_name, pokemon)
+		try:
+			pokemon_object = Pokemon.objects.get(pokemon_id=pokemon['id'])
+		except Pokemon.DoesNotExist:
+			pokemon['is_favorite_pokemon'] = False
+		else:
+			pokemon['is_favorite_pokemon'] = user.is_favorite(pokemon_object)
 		pokemons_data.append(pokemon)
 	return pokemons_data
 
 
 def getPokemonsData(user, url_list: list, pool_size: int) -> list:
+
 	"""A function to send requests using threads in order to
 		retrieve details about pokomons
 
@@ -62,14 +69,6 @@ def getPokemonsData(user, url_list: list, pool_size: int) -> list:
 	# Sort the resutls growingly by pokemon id.
 	results = sorted(results, key=itemgetter('id'))
 	# Check if pokemon is user's favorite.
-	for item in results:
-		try:
-			pokemon = Pokemon.objects.get(pokemon_id=item['id'])
-		except Pokemon.DoesNotExist:
-			item['is_favorite_pokemon'] = False
-		else:
-			item['is_favorite_pokemon'] = user.is_favorite(pokemon)
-
 	return results
 
 
