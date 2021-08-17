@@ -29,6 +29,7 @@ def getPokemonsCachedData(user, pokemons_name_list: int) -> list:
 		# Send request to obtain data and save it to the cache
 			pokemon = requests.get(f'https://pokeapi.co/api/v2/pokemon/{pokemon_name}').json()
 			cache.set(pokemon_name, pokemon)
+		# Check if this particular pokemon is user's favorite
 		try:
 			pokemon_object = Pokemon.objects.get(pokemon_id=pokemon['id'])
 		except Pokemon.DoesNotExist:
