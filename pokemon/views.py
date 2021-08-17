@@ -6,7 +6,7 @@ from django.views import View
 from django.views.generic.base import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .utils import getPokemonsData, getEvolutionChain, getPokemonsCachedData
+from .utils import getEvolutionChain, getPokemonsCachedData, extractIdFromUrl
 from .mixins import PaginateTemplateMixin
 from authentication.models import User, Pokemon
 
@@ -18,11 +18,11 @@ class MainPageView(LoginRequiredMixin, PaginateTemplateMixin):
 		# Get the context
 		context = super().get_context_data(**kwargs)
 		response = context['response']
-		names_list = [
-			element['name'] for element in response['results']
+		pokemon_id_list = [
+			extractIdFromUrl(element['url']) for element in response['results']
 		]
 		context['pokemon_data'] = getPokemonsCachedData(self.request.user,
-												  names_list)
+												  pokemon_id_list)
 		return context
 
 
@@ -31,17 +31,11 @@ class DetailPageView(LoginRequiredMixin, TemplateView):
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
-		pokemon_id = kwargs['id']
-		response = requests.get(
-			f'https://pokeapi.co/api/v2/pokemon/{pokemon_id}/'
-		).json()
-		try:
-			pokemon = Pokemon.objects.get(pokemon_id = response['id'])
-			context['is_favorite_pokemon'] = self.request.user.is_favorite(pokemon)
-		except Pokemon.DoesNotExist:
-			context['is_favorite_pokemon'] = False
-		context['pokemon_data'] = response
-		context['evolution_chain'] = getEvolutionChain(self.request.user, response)
+		pokemon_id = []
+		pokemon_id.append(kwargs['id'])
+		pokemon_data = getPokemonsCachedData(self.request.user, pokemon_id)
+		context['pokemon_data'] = pokemon_data[0]
+		context['evolution_chain'] = getEvolutionChain(self.request.user, pokemon_data[0])
 		return context
 
 
@@ -53,11 +47,11 @@ class FavoritePokemonsView(LoginRequiredMixin, TemplateView):
 		user = self.request.user
 		queryset = user.favorite_pokemons.all()
 		# Create list with urls for user's favorite pokemons
-		url_list = [
-			f'https://pokeapi.co/api/v2/pokemon/{element.pokemon_id}' for element in queryset
+		id_list = [
+			element.pokemon_id for element in queryset
 		]
 		# Add pokemons data to the context
-		context['pokemon_data'] = getPokemonsData(self.request.user, url_list, len(queryset))
+		context['pokemon_data'] = getPokemonsCachedData(self.request.user, id_list)
 		return context
 
 
