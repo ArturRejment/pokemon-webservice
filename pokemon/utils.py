@@ -10,7 +10,12 @@ from authentication.models import Pokemon
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
-def getPokemonsCachedData(user, pokemons_name_list: int) -> list:
+def extractIdFromUrl(url: str) -> int:
+	splitted_url = url.split('/')
+	return int(splitted_url[-2])
+
+
+def getPokemonsCachedData(user, pokemon_id_list: int) -> list:
 	"""Retrieve cached information about Pokemon with Redis or
 	send request and cache it if is not present
 
@@ -20,15 +25,16 @@ def getPokemonsCachedData(user, pokemons_name_list: int) -> list:
 						  fetched
 	"""
 	pokemons_data = []
-	for pokemon_name in pokemons_name_list:
+	for pokemon_id in pokemon_id_list:
 		# Try to retrieve pokemon form cache
-		if cache.get(pokemon_name):
-			pokemon = cache.get(pokemon_name)
+		if cache.get(pokemon_id):
+			pokemon = cache.get(pokemon_id)
 		else:
 		# If pokemon does not exist in cache
 		# Send request to obtain data and save it to the cache
-			pokemon = requests.get(f'https://pokeapi.co/api/v2/pokemon/{pokemon_name}').json()
-			cache.set(pokemon_name, pokemon)
+			pokemon = requests.get(f'https://pokeapi.co/api/v2/pokemon/{pokemon_id}').json()
+			cache.set(pokemon_id, pokemon)
+		# Check if this particular pokemon is user's favorite
 		try:
 			pokemon_object = Pokemon.objects.get(pokemon_id=pokemon['id'])
 		except Pokemon.DoesNotExist:
@@ -37,39 +43,6 @@ def getPokemonsCachedData(user, pokemons_name_list: int) -> list:
 			pokemon['is_favorite_pokemon'] = user.is_favorite(pokemon_object)
 		pokemons_data.append(pokemon)
 	return pokemons_data
-
-
-def getPokemonsData(user, url_list: list, pool_size: int) -> list:
-
-	"""A function to send requests using threads in order to
-		retrieve details about pokomons
-
-	Args:
-		user ([User]): [User instance fetched from request]
-		url_list (list): [List of urls for every pokemon]
-		pool_size (int): [Number of pokemons - to add proper number of
-						  tasks]
-
-	Returns:
-		list: [List of dictionaries with pokemon details]
-	"""
-
-	pool = ThreadPool(pool_size)
-	r = requests.session()
-	# Create blank list to store json's with details about pokemons.
-	results = []
-	# Declare new fuction to send requests and store the results.
-	def get(url):
-		resp = r.get(url).json()
-		results.append(resp)
-	# Add a list of tasks to the queue.
-	pool.map(get, url_list)
-	# Wait untill all of the tasks are completed.
-	pool.wait_completion()
-	# Sort the resutls growingly by pokemon id.
-	results = sorted(results, key=itemgetter('id'))
-	# Check if pokemon is user's favorite.
-	return results
 
 
 def getEvolutionChain(user, response) -> list:
@@ -91,18 +64,18 @@ def getEvolutionChain(user, response) -> list:
 	# Fetch data about evolution chain.
 	pokemon_evolution_chain = requests.get(pokemon_evolution_chain_url).json()
 	# Create a list to store urls of every pokemon present in the chain.
-	evolution_chain_names = []
+	evolution_chain_ids = []
 	# Create url for first pokemon in the chain.
 	evolves_to = pokemon_evolution_chain['chain']
-	evolution_chain_names.append(
-		evolves_to["species"]["name"]
+	evolution_chain_ids.append(
+		extractIdFromUrl(evolves_to["species"]["url"])
 	)
 	# Fetch other pokemons present in the chain as long as they exist.
 	evolves_to = evolves_to['evolves_to']
 	while len(evolves_to) != 0:
-		name = evolves_to[0]['species']['name']
+		id = extractIdFromUrl(evolves_to[0]['species']['url'])
 		# Fetch data about specific pokemon in the chain.
-		evolution_chain_names.append(name)
+		evolution_chain_ids.append(id)
 		evolves_to = evolves_to[0]['evolves_to']
 	# Return list with data about all pokemons in evelution chain.
-	return getPokemonsCachedData(user, evolution_chain_names)
+	return getPokemonsCachedData(user, evolution_chain_ids)

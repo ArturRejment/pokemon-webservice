@@ -14,20 +14,21 @@
 
 						<h4 class="pokemon-type">
 						{% for type in pokemon.types %}
-							<span class="shadow {{type.type.name}}"> {{type.type.name}} </span>
+							<span class="shadow {{type.type.name}}"> {{type.type.name}}</span>
 						{% endfor %}
 					</div>
+
 					<div class="button-space">
 						<a class="btn btn-outline-warning" href="{% url 'pokemon_detail' pokemon.id %}"> More Details </a> <br>
-						{% if is_favorite_pokemon %}
-							<form action="{% url 'favorite_pokemon' pokemon.id %}" method="post">
-								{% csrf_token %}
-								<button type="submit" class="btn btn-outline-danger" > unfavorite </button>
-							</form>
-						{% else %}
+						{% if pokemon.is_favorite_pokemon %}
 							<form action="{% url 'unfavorite_pokemon' pokemon.id %}" method="post">
 								{% csrf_token %}
 								<button type="submit" class="btn btn-outline-danger" > unfavorite </button> <br>
+							</form>
+						{% else %}
+							<form action="{% url 'favorite_pokemon' pokemon.id %}" method="post">
+								{% csrf_token %}
+								<button type="submit" class="btn btn-outline-danger" > unfavorite </button>
 							</form>
 						{% endif %}
 					</div>
