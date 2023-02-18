@@ -1,6 +1,7 @@
 version: "3.9"
 
 services:
+
     pokeserver:
         build: .
         container_name: pokeserver
@@ -11,11 +12,11 @@ services:
             - "8000:8000"
         environment:
             - DEBUG=1
-            - DJANGO_ALLOWED_HOSTS=127.0.0.1
             - REDIS_HOST=redis
         depends_on:
             - pokedb
             - redis
+
     pokedb:
         image: postgres
         container_name: pokedb
@@ -25,7 +26,9 @@ services:
             - POSTGRES_PASSWORD=postgres
         volumes:
             - pgdata:/var/lib/postgresql/data/
+
     redis:
         image: "redis:alpine"
+
 volumes:
     pgdata:
