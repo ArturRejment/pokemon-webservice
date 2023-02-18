@@ -16,7 +16,7 @@ SECRET_KEY = env("DJANGO_SECRET", "secret")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(env("DJANGO_DEBUG", False))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -133,9 +133,7 @@ AUTH_USER_MODEL = 'authentication.User'
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-]
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
