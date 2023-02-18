@@ -13,7 +13,7 @@ services:
         ports:
             - "8000:8000"
         environment:
-            - DEBUG=1
+            - DJANGO_DEBUG=1
             - REDIS_HOST=redis
         depends_on:
             - pokedb
