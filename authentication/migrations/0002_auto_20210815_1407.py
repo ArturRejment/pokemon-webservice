@@ -4,19 +4,20 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('pokemon', '0001_initial'),
-        ('authentication', '0001_initial'),
+        ("pokemon", "0001_initial"),
+        ("authentication", "0001_initial"),
     ]
 
     operations = [
         migrations.DeleteModel(
-            name='Pokemon',
+            name="Pokemon",
         ),
         migrations.AlterField(
-            model_name='user',
-            name='favorite_pokemons',
-            field=models.ManyToManyField(blank=True, related_name='fav_pokemon', to='pokemon.Pokemon'),
+            model_name="user",
+            name="favorite_pokemons",
+            field=models.ManyToManyField(
+                blank=True, related_name="fav_pokemon", to="pokemon.Pokemon"
+            ),
         ),
     ]
