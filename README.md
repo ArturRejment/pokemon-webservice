@@ -12,15 +12,7 @@ Connection with API is made with Python's REQUESTS library (https://docs.python-
 First of all, make sure that you have Docker installed.
 
 - Clone this repo
-- With text editor open `webservice/settings.py`
-- At the top of this file find line `from .keys import DB_PASS` and comment it out
-- In terminal hit `docker-compose run pokeserver`
-- Close running process with `Ctrl + C`
 - Run server with `docker-compose up`
-- Open new terminal
-- Go to the server container with `docker exec -it pokeserver bash`
-- Migrate database with `python manage.py migrate`
-- Run server with `python manage.py runserver`
 
 Now you can open a browser on http://127.0.0.1:8000/, create an account and start browsing Pokemons!
 

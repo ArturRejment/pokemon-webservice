@@ -4,17 +4,20 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Pokemon',
+            name="Pokemon",
             fields=[
-                ('pokemon_id', models.PositiveIntegerField(primary_key=True, serialize=False, unique=True)),
+                (
+                    "pokemon_id",
+                    models.PositiveIntegerField(
+                        primary_key=True, serialize=False, unique=True
+                    ),
+                ),
             ],
         ),
     ]
