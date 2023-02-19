@@ -12,14 +12,18 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
-    def favorite(self, pokemon):
+    def favorite(self, pokemon: Pokemon) -> None:
         """Add specific pokemon to favorites"""
         self.favorite_pokemons.add(pokemon)
 
-    def unfavorite(self, pokemon):
+    def unfavorite(self, pokemon: Pokemon) -> None:
         """Remove specific pokemon from favorites"""
         self.favorite_pokemons.remove(pokemon)
 
-    def is_favorite(self, pokemon):
+    def is_favorite(self, pokemon_id: int) -> bool:
         """Returns True if pokemon is user's favorite. False otherwise"""
-        return self.favorite_pokemons.filter(pokemon_id=pokemon.pokemon_id).exists()
+        try:
+            Pokemon.objects.get(pokemon_id=pokemon_id)
+        except Pokemon.DoesNotExist:
+            return False
+        return self.favorite_pokemons.filter(pokemon_id=pokemon_id).exists()

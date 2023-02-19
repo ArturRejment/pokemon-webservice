@@ -1,7 +1,12 @@
 from django.urls import path
 
-from .views import (AddPokemonToFavorite, DetailPageView, FavoritePokemonsView,
-                    MainPageView, RemovePokemonFromFavorite)
+from .views import (
+    AddPokemonToFavorite,
+    DetailPageView,
+    FavoritePokemonsView,
+    MainPageView,
+    RemovePokemonFromFavorite,
+)
 
 urlpatterns = [
     path("", MainPageView.as_view(), name="main_page"),

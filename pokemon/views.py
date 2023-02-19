@@ -8,7 +8,7 @@ from django.views.generic.base import TemplateView
 from authentication.models import Pokemon, User
 
 from .mixins import PaginateTemplateMixin
-from .utils import extractIdFromUrl, getEvolutionChain, getPokemonsCachedData
+from .utils import extract_id_from_url, get_evolution_chain, get_pokemons_cached_data
 
 
 class MainPageView(LoginRequiredMixin, PaginateTemplateMixin):
@@ -19,9 +19,9 @@ class MainPageView(LoginRequiredMixin, PaginateTemplateMixin):
         context = super().get_context_data(**kwargs)
         response = context["response"]
         pokemon_id_list = [
-            extractIdFromUrl(element["url"]) for element in response["results"]
+            extract_id_from_url(element["url"]) for element in response["results"]
         ]
-        context["pokemon_data"] = getPokemonsCachedData(
+        context["pokemon_data"] = get_pokemons_cached_data(
             self.request.user, pokemon_id_list
         )
         return context
@@ -34,9 +34,9 @@ class DetailPageView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         pokemon_id = []
         pokemon_id.append(kwargs["id"])
-        pokemon_data = getPokemonsCachedData(self.request.user, pokemon_id)
+        pokemon_data = get_pokemons_cached_data(self.request.user, pokemon_id)
         context["pokemon_data"] = pokemon_data[0]
-        context["evolution_chain"] = getEvolutionChain(
+        context["evolution_chain"] = get_evolution_chain(
             self.request.user, pokemon_data[0]
         )
         return context
@@ -52,27 +52,19 @@ class FavoritePokemonsView(LoginRequiredMixin, TemplateView):
         # Create list with urls for user's favorite pokemons
         id_list = [element.pokemon_id for element in queryset]
         # Add pokemons data to the context
-        context["pokemon_data"] = getPokemonsCachedData(self.request.user, id_list)
+        context["pokemon_data"] = get_pokemons_cached_data(self.request.user, id_list)
         return context
 
 
 class AddPokemonToFavorite(LoginRequiredMixin, View):
-    """View responsible for adding pokemon to favorites
-    and redirecting to the previous site.
-    """
-
     def post(self, request, **kwargs):
         user = request.user
-        pokemon = Pokemon.objects.get_or_create(pokemon_id=kwargs["id"])
-        user.favorite(pokemon[0])
+        pokemon, _ = Pokemon.objects.get_or_create(pokemon_id=kwargs["id"])
+        user.favorite(pokemon)
         return redirect(request.META.get("HTTP_REFERER"))
 
 
 class RemovePokemonFromFavorite(LoginRequiredMixin, View):
-    """View responsible for removing pokemon from favorites
-    and redirecting to the previous site.
-    """
-
     def post(self, request, **kwargs):
         user = request.user
         try:
